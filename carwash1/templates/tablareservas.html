@@ -1,0 +1,115 @@
+{% extends 'base.html' %} {% load static %} {% block js %}}
+
+
+<script>
+    function eliminarIngreso(id) {
+        Swal.fire({
+                "title": "¡Estas Seguro?",
+                "text": "Esta acción no se puede deshacer",
+                "icon": "question",
+                "showCancelButton": true,
+                "cancelButtonText": "No, Cancelar",
+                "confirmButtonText": "Si,Elimnar",
+                "reverseButton": true,
+                "confirmButtonColor": "#dc3545"
+
+            })
+            .then(function(result) {
+                if (result.isConfirmed) {
+                    window.location.href = "/eliminar_ingreso/" + id + "/"
+
+                }
+            })
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" /> {% endblock %} {% block css %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css"> {% endblock %} {% block contenido %}
+
+<!DOCTYPE html>
+
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <![endif]-->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Car wash Lomas Laser</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+
+</head>
+
+<body>
+
+    <h2>Ingresos de Vehículos</h2>
+
+
+
+
+
+
+
+
+
+
+
+    <table class="table table-striped table-responsive-sm">
+
+
+        <tr>
+            <th>User</th>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Fecha y Hora</th>
+            <th>Vehiculo</th>
+            <th>Lavado</th>
+            
+
+
+
+        </tr>
+        {% for ing in entity %}
+        <tr>
+            <td>{{ing.User}}</td>
+            <td>{{ing.Nombre}}</td>
+            <td>{{ing.Correo_Electronico}}</td>
+            <td>{{ing.fecha}}</td>
+            <td>{{ing.vehiculo}}</td>
+            <td>{{ing.lavado}}</td>
+           
+            <td>
+                
+                <a href="#" onclick="eliminarIngreso({{ ing.id }})" class="btn btn-danger btn-sm">Eliminar</a>
+
+
+            {% endfor %}
+    </table>
+
+    <hr>
+
+
+
+
+
+
+
+
+
+
+    <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+    <script src="" async defer></script>
+</body>
+
+{% endblock %}
+
+</html>

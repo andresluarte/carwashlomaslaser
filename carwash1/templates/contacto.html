@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block js %}
+
+<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+
+{% endblock %}
+
+{% block css %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+
+{% endblock %}
+
+{% block contenido %}
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Car wash lomas laser</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <h2>Contactanos!</h2>
+        <form action="" class="formulario_contacto" id="formulario_contacto">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" name="nombre">
+            <br>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="tu@email.cl">
+            <br>
+            <label for="telefono">Telefono</label>
+            <input type="number" name="telefono" id="telefono">
+            <br>
+            <label for="tipoconsulta">Tipo consulta</label>
+            <select name="tipoconsulta" id="tipoconsulta">
+                <option value="">seleccionar</option>
+                <option value="consulta">consulta</option>
+                <option value="reclamo">reclamo</option>
+                <option value="sugerencia">sugerencia</option>
+                <option value="felicitaciones">felicitaciones</option>
+            </select>
+            <br>
+            <label for="mensaje">Mensaje</label>
+            <textarea name="mensaje" id="mensaje" cols="30" rows="10"></textarea>
+            <br>
+            
+         
+            <br>
+            <!--
+            
+            <label for="">Sexo</label>
+            <label for="masculino">Masculino</label>
+            <input type="radio" name="sexo" id="masculino" checked>
+            <label for="femenino">Femenino</label>
+            <input type="radio" name="sexo" id="femenino">
+
+            <br>
+            
+            <label for="fechanacimiento">Fecha nacimiento</label>
+            <input type="date" name="fechanacimiento" id="fechanacimiento">
+            <br>
+            <label for="color">Color</label>
+            <input type="color" name="color" id="color">
+            
+            <br>
+            <input type="datetime-local" name="" id="">-->
+
+            <button type="button" id="btnEnviar" class="button">Enviar</button>
+            
+
+        </form>
+
+        <table id="tablacontactos">
+            
+        </table>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        
+        <script src="" async defer></script>
+    </body>
+
+    {% endblock %}
+</html>
+

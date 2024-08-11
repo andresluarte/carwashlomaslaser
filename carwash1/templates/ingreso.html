@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Wash Lomas Laser</title>
+    {% block css %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+    <style>
+        .signature-pad {
+            border: 1px solid #000;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+    </style>
+    {% endblock %}
+</head>
+<body>
+    {% block contenido %}
+    <h2>Ingresar Vehículo</h2>
+    <div class="row">
+        <div class="col-10 col-md-8 offset-md-3">
+            <form action="" method="POST">
+                {% csrf_token %}
+                
+                <h3>Patente</h3>
+                <div class="form-group">
+                    <input type="text" name="patente" id="patente" class="form-control" placeholder="Ej: BTPY40" />
+                </div>
+
+                <h3>Vehículo</h3>
+                <div class="form-group">
+                    {{ form.vehiculo }}
+                </div>
+
+                <h3>Tipo de Lavado</h3>
+                <div class="form-group">
+                    {{ form.lavado }}
+                </div>
+
+                <h3>Tipo de Pago</h3>
+                <div class="form-group">
+                    {{ form.tipo_de_pago }}
+                </div>
+
+                <h3>Tipo de Documento</h3>
+                <div class="form-group">
+                    {{ form.tipo_doc }}
+                </div>
+
+                <div id="rut-field" style="display: none;">
+                    <h3>RUT</h3>
+                    <div class="form-group">
+                        {{ form.Rut }}
+                    </div>
+                </div>
+
+                <h3>Valor</h3>
+                <div class="form-group">
+                    {{ form.valor }}
+                </div>
+
+                <h3>Propina</h3>
+                <div class="form-group">
+                    {{ form.propina }}
+                </div>
+
+                <h3>Contacto Telefónico</h3>
+                <div class="form-group">
+                    {{ form.contacto }}
+                </div>
+
+                
+
+                <h3>Firma Electrónica</h3>
+                <div class="form-group">
+                    <div id="signature-pad" class="signature-pad">
+                        <canvas id="signature-canvas" width="400" height="200"></canvas>
+                    </div>
+                    <button type="button" id="clear" class="btn btn-secondary">Limpiar</button>
+                    <button type="button" id="save" class="btn btn-primary">Guardar Firma</button>
+                    <input type="hidden" id="id_firma_electronica" name="firma_electronica">
+                </div>
+
+                <h3>Cliente Acepta</h3>
+                <div class="form-group">
+                    <label><input type="radio" name="cliente_acepta" value="si" /> Sí</label>
+                    <label><input type="radio" name="cliente_acepta" value="no" /> No</label>
+                </div>
+                {% if form.non_field_errors %}
+    <div class="alert alert-danger">
+        {% for error in form.non_field_errors %}
+            <p>{{ error }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% for field in form %}
+    {% if field.errors %}
+        <div class="alert alert-danger">
+            {% for error in field.errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endfor %}
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+                <div class="d-flex justify-content-end">
+                    <input type="reset" value="Cancelar" class="btn btn-danger"> &nbsp;
+                    <button type="submit" id="btnEnviar" style="background-color: forestgreen;" class="btn btn-primary">Ingresar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% block js %}
+    <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-correct patente
+            document.getElementById('patente')?.addEventListener('input', function() {
+                var value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                var formattedValue = value.match(/.{1,2}/g)?.join('-') || '';
+                this.value = formattedValue;
+            });
+
+            // Auto-fill valor and propina
+            var vehiculoField = document.querySelector('[name="vehiculo"]');
+            var lavadoField = document.querySelector('[name="lavado"]');
+            var valorField = document.querySelector('[name="valor"]');
+            var propinaField = document.querySelector('[name="propina"]');
+
+            function updateFields() {
+                var vehiculo = vehiculoField?.value;
+                var lavado = lavadoField?.value;
+                var valor = 0;
+
+                if (vehiculo === 'CITYCAR') {
+                    valor = (lavado === 'EXPRESS') ? 9000 : 14000;
+                } else if (vehiculo === 'SEDAN' || vehiculo === 'HATCHBACK') {
+                    valor = (lavado === 'EXPRESS') ? 11000 : 14000;
+                } else if (vehiculo === 'SUV') {
+                    valor = (lavado === 'EXPRESS') ? 12000 : 17000;
+                } else if (vehiculo === 'CAMIONETA') {
+                    valor = (lavado === 'EXPRESS') ? 14000 : 19000;
+                } else if (vehiculo === 'XL') {
+                    valor = (lavado === 'EXPRESS') ? 17000 : 26000;
+                }
+
+                if (valorField) {
+                    valorField.value = valor;
+                }
+                if (propinaField) {
+                    propinaField.value = (valor * 0.1).toFixed(0);
+                }
+            }
+
+            vehiculoField?.addEventListener('change', updateFields);
+            lavadoField?.addEventListener('change', updateFields);
+
+            // Show/Hide RUT field and set estado_factura based on type of document
+            var tipoDocField = document.querySelector('[name="tipo_doc"]');
+            var rutField = document.getElementById('rut-field');
+            
+            document.getElementById('rut-field').addEventListener('input', function (e) {
+                var rut = e.target.value.replace(/\./g, '').replace('-', '').toUpperCase();
+                if (rut.length > 1) {
+                    var cuerpo = rut.slice(0, -1);
+                    var dv = rut.slice(-1);
+                    e.target.value = cuerpo.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + '-' + dv;
+                }
+            });
+            var estadoFacturaField = document.querySelector('[name="estado_factura"]');
+            
+            tipoDocField?.addEventListener('change', function() {
+                if (this.value === 'FACTURA') {
+                    rutField.style.display = 'block';
+                    if (estadoFacturaField) {
+                        estadoFacturaField.value = 'POR EMITIR'; // Set default state for factura
+                    }
+                } else {
+                    rutField.style.display = 'none';
+                    if (estadoFacturaField) {
+                        estadoFacturaField.value = 'SIN FACTURA'; // Set default state for boleta
+                    }
+                }
+            });
+
+            // Signature pad initialization
+            var canvas = document.getElementById('signature-canvas');
+            if (canvas) {
+                var signaturePad = new SignaturePad(canvas);
+
+                document.getElementById('clear')?.addEventListener('click', function () {
+                    signaturePad.clear();
+                });
+
+                document.getElementById('save')?.addEventListener('click', function () {
+                    if (signaturePad.isEmpty()) {
+                        alert("Por favor, firme antes de guardar.");
+                    } else {
+                        var dataURL = signaturePad.toDataURL('image/png');
+                        document.getElementById('id_firma_electronica').value = dataURL;
+                    }
+                });
+            }
+
+            // Initialize bxSlider if exists
+            if ($('.bxslider').length > 0) {
+                $('.bxslider').bxSlider();
+            }
+        });
+    </script>
+    {% endblock %}
+    
+</body>
+{% endblock %}
+</html>

@@ -1,0 +1,68 @@
+{% extends 'base.html' %} {% load static %} {% block js %}
+
+<script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" /> {% endblock %} {% block css %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css"> {% endblock %} {% block contenido %} {% load crispy_forms_tags %}
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <<![endif]-->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Car wash lomas laser</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+</head>
+
+<body>
+    <h2>Modificar Ingreso Vehículos</h2>
+
+
+    <div class="row">
+        <div class="col-10 col-md-8 offset-md-3">
+            <form action="" class="formulario_ingreso" method="POST">
+
+                {% csrf_token %} {{form | crispy}}
+
+                <br>
+                <br>
+
+                <div class="d-flex justify-content-end">
+                    <input type="reset" value="Cancelar" class="btn btn-danger"> &nbsp;
+
+
+
+                    <button type="submit" id=btnEnviar style="background-color: forestgreen;" class="button">Editar</button>
+
+                </div>
+
+            </form>
+            {{mensaje}}
+
+
+        </div>
+
+    </div>
+
+    <script src="" async defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var estadoVehiculoField = document.querySelector('#id_estado_vehiculo');
+            
+            estadoVehiculoField.addEventListener('change', function() {
+                if (this.value === 'TERMINADO') {
+                    alert('Notificar a Cliente');
+                }
+            });
+        });
+    </script>
+</body>
+{% endblock %}
+
+</html>
