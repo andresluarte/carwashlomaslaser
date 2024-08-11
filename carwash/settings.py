@@ -89,17 +89,27 @@ WSGI_APPLICATION = 'carwash.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'HOST':'localhost',
+#         'PORT':5432,
+#         'NAME':'lomas_laser_django',
+#         'USER':'postgres',
+#         'PASSWORD':'password',
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'HOST':'localhost',
+        'HOST':'cat670aihdrkt1.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com',
         'PORT':5432,
-        'NAME':'lomas_laser_django',
-        'USER':'postgres',
-        'PASSWORD':'password',
+        'NAME':'dbu48em3g03uka',
+        'USER':'uhi04smjc2a8o',
+        'PASSWORD':'p8271dfc18539d0654b24d3b2e8eeba74298280b2f0c72c580a4bb032b486e12b',
     }
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -142,7 +152,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR,"media")
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'carwash1/static'),
+]
+
 
 django_heroku.settings(locals())
 
