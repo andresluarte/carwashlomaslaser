@@ -153,10 +153,14 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'carwash1/static'),
-]
 
+
+# Configure Django to find your static files in the staticfiles directory
+#STATICFILES_DIRS = [
+#    os.path.join(BASE_DIR, 'staticfiles'),
+#]
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 django_heroku.settings(locals())
 
