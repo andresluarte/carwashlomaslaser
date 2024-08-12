@@ -20,6 +20,9 @@ import re
 from django.core.exceptions import ValidationError
 
 
+import re
+from django.core.exceptions import ValidationError
+
 def validar_rut_chileno(value):
     # Remover puntos, guion y convertir a mayúsculas
     rut = value.upper().replace(".", "").replace("-", "")
@@ -36,7 +39,7 @@ def validar_rut_chileno(value):
     reversed_digits = map(int, reversed(rut_sin_dv))
     factors = [2, 3, 4, 5, 6, 7]
     total = sum(d * f for d, f in zip(reversed_digits, factors * len(rut_sin_dv)))
-    remainder = 11 - total % 11
+    remainder = 11 - (total % 11)
     
     if remainder == 11:
         dv_calculado = '0'
@@ -48,6 +51,7 @@ def validar_rut_chileno(value):
     # Verificar si el dígito verificador calculado coincide con el proporcionado
     if dv_calculado != dv:
         raise ValidationError('RUT inválido. Dígito verificador incorrecto.')
+
 
 class Ingreso(models.Model):
     VEHICULO_CHOICES = [
