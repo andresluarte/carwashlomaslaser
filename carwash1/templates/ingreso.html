@@ -31,8 +31,9 @@
                 <h3>Patente</h3>
                 <div class="form-group">
                     <input type="text" name="patente" id="patente" class="form-control" placeholder="Ej: BTPY40"
-                        value="{{ form.patente.value }}">
+                        value="{{ form.patente.value|default:'' }}">
                 </div>
+                
 
                 <h3>Vehículo</h3>
                 <div class="form-group">
