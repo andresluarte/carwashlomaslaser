@@ -158,50 +158,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var canvas = document.getElementById('signature-canvas');
-            var signaturePad = new SignaturePad(canvas);
-            var saveButton = document.getElementById('save');
-            var clearButton = document.getElementById('clear');
-            var signatureInput = document.getElementById('id_firma_electronica');
+        
 
-            // Ajusta el tamaño del lienzo
-            canvas.width = canvas.clientWidth;
-            canvas.height = canvas.clientHeight;
-
-            // Asegúrate de que solo haya un único listener en el botón de guardar
-            if (saveButton) {
-                saveButton.removeEventListener('click', saveSignature); // Elimina cualquier listener previo
-                saveButton.addEventListener('click', saveSignature);
-            }
-
-            function saveSignature(event) {
-                console.log("Save button clicked");
-                if (!signaturePad.isEmpty()) {
-                    var dataURL = signaturePad.toDataURL();
-                    signatureInput.value = dataURL;
-                    alert('Firma guardada correctamente');
-                } else {
-                    alert('Por favor, firme en el recuadro.');
-                    event.preventDefault();
-                }
-            }
-
-            clearButton?.addEventListener('click', function () {
-                signaturePad.clear();
-                signatureInput.value = '';
-            });
-
-            // Restaurar firma si está disponible
-            if (signatureInput.value) {
-                var image = new Image();
-                image.src = signatureInput.value;
-                image.onload = function () {
-                    signaturePad.fromDataURL(signatureInput.value);
-                };
-            }
-        });
-yy
         document.addEventListener('DOMContentLoaded', function () {
             // Auto-correct patente
             document.getElementById('patente')?.addEventListener('input', function () {
@@ -289,10 +247,52 @@ yy
                 this.value = formatRut(this.value.replace(/\D/g, ''));
             });
 
-            // Signature Pad
+            
+            var canvas = document.getElementById('signature-canvas');
+            var signaturePad = new SignaturePad(canvas);
+            var saveButton = document.getElementById('save');
+            var clearButton = document.getElementById('clear');
+            var signatureInput = document.getElementById('id_firma_electronica');
 
+            // Ajusta el tamaño del lienzo
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
 
+            // Asegúrate de que solo haya un único listener en el botón de guardar
+            if (saveButton) {
+                saveButton.removeEventListener('click', saveSignature); // Elimina cualquier listener previo
+                saveButton.addEventListener('click', saveSignature);
+            }
+
+            function saveSignature(event) {
+                console.log("Save button clicked");
+                if (!signaturePad.isEmpty()) {
+                    var dataURL = signaturePad.toDataURL();
+                    signatureInput.value = dataURL;
+                    alert('Firma guardada correctamente');
+                } else {
+                    alert('Por favor, firme en el recuadro.');
+                    event.preventDefault();
+                }
+            }
+
+            clearButton?.addEventListener('click', function () {
+                signaturePad.clear();
+                signatureInput.value = '';
+            });
+
+            // Restaurar firma si está disponible
+            if (signatureInput.value) {
+                var image = new Image();
+                image.src = signatureInput.value;
+                image.onload = function () {
+                    signaturePad.fromDataURL(signatureInput.value);
+                };
+            }
         });
+
+
+        
 
 
 
