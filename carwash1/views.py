@@ -103,26 +103,30 @@ def eliminar_ingreso(request,id):
     messages.success(request,"Eliminado Correctamente")
     return redirect(to=tabla_ingresos)
 
-
+from django.contrib.auth.models import Permission
+@login_required
 def registro(request):
-
-    data ={
-        'form':CustomUserCreationForm()
+    data = {
+        'form': CustomUserCreationForm()
     }
 
     if request.method == 'POST':
         formulario = CustomUserCreationForm(data=request.POST)
         if formulario.is_valid():
-            formulario.save()
-            user = authenticate(username=formulario.cleaned_data["username"],password=formulario.cleaned_data["password1"])
-            login(request,user)    
-            messages.success(request,"Te has registrado correctamente")
+            user = formulario.save()
+
+            # Asignar permisos específicos
+            permiso_ingreso = Permission.objects.get(codename='view_ingreso')
+            permiso_tabla_ingresos = Permission.objects.get(codename='add_ingreso')
+            user.user_permissions.add(permiso_ingreso, permiso_tabla_ingresos)
+            
+            # Autenticar y loguear al usuario
+            login(request, user)
+            messages.success(request, "Te has registrado correctamente")
             return redirect(to=inicio)
         data["form"] = formulario
         
-        
-    return render(request,'registration/registro.html',data)
-
+    return render(request, 'registration/registro.html', data)
 
 
     
