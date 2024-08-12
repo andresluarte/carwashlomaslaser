@@ -73,7 +73,7 @@ class Ingreso(models.Model):
     estado_vehiculo = models.CharField(max_length=15, choices=ESTADO_VEHICULO_CHOICES, default='POR REALIZAR')
     tipo_doc = models.CharField(max_length=10, choices=TIPO_DOC_CHOICES)
     estado_factura = models.CharField(max_length=15, choices=ESTADO_FACTURA_CHOICES, default='SIN FACTURA')
-    Rut = models.CharField(max_length=15, blank=True, null=True, validators=[validar_rut_chileno])
+    Rut = models.CharField(max_length=15, blank=True, null=True)
     fecha_ingreso = models.DateTimeField(auto_now_add=True)
     cliente_acepta = models.BooleanField(default=False)
     firma_electronica = models.CharField(max_length=1000000, blank=True, null=True)
