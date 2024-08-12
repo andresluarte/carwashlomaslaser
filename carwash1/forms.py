@@ -15,41 +15,41 @@ import base64
 
 class IngresoForm(forms.ModelForm):
     valor = forms.IntegerField(
-        label='Valor', 
-        min_value=1000, 
-        max_value=50000, 
+        label='Valor',
+        min_value=1000,
+        max_value=50000,
         widget=forms.TextInput(attrs={'readonly': 'readonly'})
     )
     propina = forms.DecimalField(
-        label='Propina', 
-        max_digits=10, 
-        decimal_places=0
+        label='Propina',
+        max_digits=10,
+        decimal_places=0,
     )
     contacto = forms.CharField(
-        label='Contacto Telefónico', 
+        label='Contacto Telefónico',
         required=False
     )
     correo = forms.EmailField(
-        label='Correo Electrónico', 
+        label='Correo Electrónico',
         required=False
     )
     tipo_doc = forms.ChoiceField(
-        label='Tipo Documento', 
+        label='Tipo Documento',
         choices=[('BOLETA', 'Boleta'), ('FACTURA', 'Factura')]
     )
     Rut = forms.CharField(
-        label='RUT', 
-        max_length=15, 
+        label='RUT',
+        max_length=15,
         required=False
     )
     firma_electronica = forms.CharField(
-        label='Firma Electrónica', 
+        label='Firma Electrónica',
         widget=forms.HiddenInput(),  # Placeholder para la firma electrónica en formato base64
         required=False
     )
     cliente_acepta = forms.BooleanField(
-        label='Cliente Acepta', 
-        required=False
+        label='Cliente Acepta',
+        required=True  # Puede ser True o False
     )
 
     class Meta:
@@ -60,14 +60,12 @@ class IngresoForm(forms.ModelForm):
         patente = self.cleaned_data.get('patente')
         if patente:
             patente = patente.upper().replace(' ', '')
-            # Verificar que la patente tenga exactamente 8 caracteres incluyendo guiones
             if len(patente) != 8:
                 raise forms.ValidationError("La patente debe tener exactamente 8 caracteres, incluyendo guiones.")
-            # Asegurarse de que el formato sea XX-XX-XX
             if patente[2] != '-' or patente[5] != '-':
                 raise forms.ValidationError("El formato de la patente debe ser XX-XX-XX.")
             return patente
-        return None  # Asegúrate de manejar `None` si no hay valor para `patente`
+        return patente
 
     def clean(self):
         cleaned_data = super().clean()
@@ -80,6 +78,12 @@ class IngresoForm(forms.ModelForm):
             self.add_error('Rut', 'El RUT no debe ser ingresado si no es "Factura".')
 
         return cleaned_data
+
+    def clean_cliente_acepta(self):
+        cliente_acepta = self.cleaned_data.get('cliente_acepta')
+        if cliente_acepta is None:
+            raise forms.ValidationError("Debe aceptar la declaración del cliente.")
+        return cliente_acepta
 
     def save(self, commit=True):
         instance = super().save(commit=False)
@@ -96,6 +100,7 @@ class IngresoForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+
 
 class CustomUserCreationForm(UserCreationForm):
 
