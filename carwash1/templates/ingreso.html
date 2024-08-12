@@ -248,6 +248,7 @@
             });
 
             
+            
             var canvas = document.getElementById('signature-canvas');
             var signaturePad = new SignaturePad(canvas);
             var saveButton = document.getElementById('save');
@@ -269,9 +270,9 @@
                 if (!signaturePad.isEmpty()) {
                     var dataURL = signaturePad.toDataURL();
                     signatureInput.value = dataURL;
-                    alert('Firma guardada correctamente');
+                    console.log('Firma guardada correctamente');
                 } else {
-                    alert('Por favor, firme en el recuadro.');
+                    console.log('Por favor, firme en el recuadro.');
                     event.preventDefault();
                 }
             }
@@ -279,6 +280,7 @@
             clearButton?.addEventListener('click', function () {
                 signaturePad.clear();
                 signatureInput.value = '';
+                console.log('Firma borrada');
             });
 
             // Restaurar firma si está disponible
@@ -290,6 +292,7 @@
                 };
             }
         });
+                
 
 
         
