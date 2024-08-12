@@ -68,7 +68,7 @@ class Ingreso(models.Model):
     tipo_de_pago = models.CharField(max_length=20, choices=TIPO_PAGO_CHOICES)
     valor = models.IntegerField()
     propina = models.DecimalField(max_digits=10, decimal_places=0)
-    contacto = models.CharField(max_length=15)
+    contacto = models.CharField(max_length=50)
     correo = models.EmailField(blank=True, null=True)
     estado_vehiculo = models.CharField(max_length=15, choices=ESTADO_VEHICULO_CHOICES, default='POR REALIZAR')
     tipo_doc = models.CharField(max_length=10, choices=TIPO_DOC_CHOICES)
