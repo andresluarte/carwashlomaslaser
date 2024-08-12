@@ -13,7 +13,6 @@ from django.core.files.base import ContentFile
 from PIL import Image
 import base64
 
-
 class IngresoForm(forms.ModelForm):
     valor = forms.IntegerField(
         label='Valor', 
@@ -24,8 +23,7 @@ class IngresoForm(forms.ModelForm):
     propina = forms.DecimalField(
         label='Propina', 
         max_digits=10, 
-        decimal_places=0, 
-        
+        decimal_places=0
     )
     contacto = forms.CharField(
         label='Contacto Telefónico', 
@@ -69,7 +67,7 @@ class IngresoForm(forms.ModelForm):
             if patente[2] != '-' or patente[5] != '-':
                 raise forms.ValidationError("El formato de la patente debe ser XX-XX-XX.")
             return patente
-        return patente
+        return None  # Asegúrate de manejar `None` si no hay valor para `patente`
 
     def clean(self):
         cleaned_data = super().clean()
@@ -98,6 +96,7 @@ class IngresoForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+
 class CustomUserCreationForm(UserCreationForm):
 
     class Meta:

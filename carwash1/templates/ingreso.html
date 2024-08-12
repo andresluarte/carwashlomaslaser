@@ -2,6 +2,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,6 +19,7 @@
     </style>
     {% endblock %}
 </head>
+
 <body>
     {% block contenido %}
     <h3>Ingresar Vehículo</h3>
@@ -25,10 +27,11 @@
         <div class="col-10 col-md-8 offset-md-3">
             <form action="" method="POST">
                 {% csrf_token %}
-                
+
                 <h3>Patente</h3>
                 <div class="form-group">
-                    <input type="text" name="patente" id="patente" class="form-control" placeholder="Ej: BTPY40" value="{{ form.patente.value }}">
+                    <input type="text" name="patente" id="patente" class="form-control" placeholder="Ej: BTPY40"
+                        value="{{ form.patente.value }}">
                 </div>
 
                 <h3>Vehículo</h3>
@@ -75,13 +78,17 @@
 
                 <h3>Declaración del Cliente</h3>
                 <p>
-                    El cliente manifiesta que no tiene nada importante y/o de valor dentro de su vehículo, liberando a "Carwash Lomas Laser" de cualquier responsabilidad futura. Además, no nos hacemos responsables por rayas existentes en el vehículo, las cuales se hacen visibles con el lavado.
+                    El cliente manifiesta que no tiene nada importante y/o de valor dentro de su vehículo, liberando a
+                    "Carwash Lomas Laser" de cualquier responsabilidad futura. Además, no nos hacemos responsables por
+                    rayas existentes en el vehículo, las cuales se hacen visibles con el lavado.
                 </p>
 
                 <h3>Cliente Acepta</h3>
                 <div class="form-group">
-                    <label><input type="radio" name="cliente_acepta" value="si" required {% if form.cliente_acepta.value == "si" %}checked{% endif %} /> Sí</label>
-                    <label><input type="radio" name="cliente_acepta" value="no" required {% if form.cliente_acepta.value == "no" %}checked{% endif %} /> No</label>
+                    <label><input type="radio" name="cliente_acepta" value="si" required {% if
+                            form.cliente_acepta.value=="si" %}checked{% endif %} /> Sí</label>
+                    <label><input type="radio" name="cliente_acepta" value="no" required {% if
+                            form.cliente_acepta.value=="no" %}checked{% endif %} /> No</label>
                 </div>
 
                 <h3>Firma Electrónica</h3>
@@ -93,39 +100,41 @@
                     <br>
                     <button type="button" id="clear" class="btn btn-secondary">Limpiar</button>
                     <button type="button" id="save" class="btn btn-primary">Guardar Firma</button>
-                    <input type="hidden" id="id_firma_electronica" name="firma_electronica" value="{{ form.firma_electronica.value }}">
+                    <input type="hidden" id="id_firma_electronica" name="firma_electronica"
+                        value="{{ form.firma_electronica.value }}">
                 </div>
                 <br>
                 <br>
-                
+
                 {% if form.non_field_errors %}
-                    <div class="alert alert-danger">
-                        {% for error in form.non_field_errors %}
-                            <p>{{ error }}</p>
-                        {% endfor %}
-                    </div>
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
                 {% endif %}
 
                 {% for field in form %}
-                    {% if field.errors %}
-                        <div class="alert alert-danger">
-                            {% for error in field.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+                {% if field.errors %}
+                <div class="alert alert-danger">
+                    {% for error in field.errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
                 {% endfor %}
                 {% if messages %}
-                    <ul class="messages">
-                        {% for message in messages %}
-                            <li class="{{ message.tags }}">{{ message }}</li>
-                        {% endfor %}
-                    </ul>
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
                 {% endif %}
 
                 <div class="d-flex justify-content-end">
                     <input type="reset" value="Cancelar" class="btn btn-danger"> &nbsp;
-                    <button type="submit" id="btnEnviar" style="background-color: forestgreen;" class="btn btn-primary">Ingresar</button>
+                    <button type="submit" id="btnEnviar" style="background-color: forestgreen;"
+                        class="btn btn-primary">Ingresar</button>
                 </div>
             </form>
         </div>
@@ -136,11 +145,11 @@
     <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
-    
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Auto-correct patente
-            document.getElementById('patente')?.addEventListener('input', function() {
+            document.getElementById('patente')?.addEventListener('input', function () {
                 var value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
                 var formattedValue = value.match(/.{1,2}/g)?.join('-') || '';
                 this.value = formattedValue;
@@ -184,7 +193,7 @@
             var tipoDocField = document.querySelector('[name="tipo_doc"]');
             var rutField = document.getElementById('rut-field');
             var estadoFacturaField = document.querySelector('[name="estado_factura"]');
-            
+
             // Mostrar el campo RUT si el documento es Factura
             function manageRutVisibility() {
                 if (tipoDocField?.value === 'FACTURA') {
@@ -199,7 +208,7 @@
                 rutField.style.display = 'block';
             }
 
-            tipoDocField?.addEventListener('change', function() {
+            tipoDocField?.addEventListener('change', function () {
                 manageRutVisibility();
                 if (this.value === 'FACTURA') {
                     if (estadoFacturaField) {
@@ -221,44 +230,53 @@
             }
 
             var rutInput = document.querySelector('[name="Rut"]');
-            rutInput?.addEventListener('input', function() {
+            rutInput?.addEventListener('input', function () {
                 this.value = formatRut(this.value.replace(/\D/g, ''));
             });
 
             // Signature Pad
+
+
+        });
+        document.addEventListener("DOMContentLoaded", function () {
+            // Firma Electrónica
             var signaturePad = new SignaturePad(document.getElementById('signature-canvas'));
             var saveButton = document.getElementById('save');
             var clearButton = document.getElementById('clear');
             var signatureInput = document.getElementById('id_firma_electronica');
 
-            saveButton?.addEventListener('click', function(event) {
+            saveButton?.addEventListener('click', function (event) {
                 if (!signaturePad.isEmpty()) {
                     var dataURL = signaturePad.toDataURL();
                     signatureInput.value = dataURL;
-                    alert('Firma guardada correctamente');
+                    if (!alert('Firma guardada correctamente')) {
+                        event.preventDefault();
+                    }
                 } else {
                     alert('Por favor, firme en el recuadro.');
                     event.preventDefault();
                 }
             });
 
-            clearButton?.addEventListener('click', function() {
+            clearButton?.addEventListener('click', function () {
                 signaturePad.clear();
                 signatureInput.value = '';
             });
 
-            // Restore signature if available
+            // Restaurar firma si está disponible
             if (signatureInput.value) {
                 var image = new Image();
                 image.src = signatureInput.value;
-                image.onload = function() {
+                image.onload = function () {
                     signaturePad.fromDataURL(signatureInput.value);
                 };
             }
-
         });
+
+
     </script>
     {% endblock %}
 </body>
 {% endblock %}
+
 </html>
