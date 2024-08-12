@@ -259,7 +259,14 @@
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
 
-        saveButton?.addEventListener('click', function (event) {
+        // Verifica si el botón de guardar está siendo registrado más de una vez
+        if (saveButton) {
+            saveButton.removeEventListener('click', saveSignature); // Elimina cualquier listener previo
+            saveButton.addEventListener('click', saveSignature);
+        }
+
+        function saveSignature(event) {
+            console.log("Save button clicked");
             if (!signaturePad.isEmpty()) {
                 var dataURL = signaturePad.toDataURL();
                 signatureInput.value = dataURL;
@@ -268,7 +275,7 @@
                 alert('Por favor, firme en el recuadro.');
                 event.preventDefault();
             }
-        });
+        }
 
         clearButton?.addEventListener('click', function () {
             signaturePad.clear();
@@ -284,6 +291,7 @@
             };
         }
     });
+
 
 
 
