@@ -16,13 +16,14 @@
             border-radius: 4px;
             background-color: #fff;
         }
-        #signature-canvas {
-        border: 1px solid #000;
-        width: 100%;
-        height: 200px; /* Ajusta según tus necesidades */
-        box-sizing: border-box;
-        }
 
+        #signature-canvas {
+            border: 1px solid #000;
+            width: 100%;
+            height: 200px;
+            /* Ajusta según tus necesidades */
+            box-sizing: border-box;
+        }
     </style>
     {% endblock %}
 </head>
@@ -40,7 +41,7 @@
                     <input type="text" name="patente" id="patente" class="form-control" placeholder="Ej: BTPY40"
                         value="{{ form.patente.value|default:'' }}">
                 </div>
-                
+
 
                 <h3>Vehículo</h3>
                 <div class="form-group">
@@ -94,13 +95,15 @@
                 <h3>Cliente Acepta</h3>
                 <div class="form-group">
                     <label>
-                        <input type="radio" name="cliente_acepta" value="True" required {% if form.cliente_acepta.value %}checked{% endif %} /> Sí
+                        <input type="radio" name="cliente_acepta" value="True" required {% if form.cliente_acepta.value
+                            %}checked{% endif %} /> Sí
                     </label>
                     <label>
-                        <input type="radio" name="cliente_acepta" value="False" required {% if not form.cliente_acepta.value %}checked{% endif %} /> No
+                        <input type="radio" name="cliente_acepta" value="False" required {% if not
+                            form.cliente_acepta.value %}checked{% endif %} /> No
                     </label>
                 </div>
-                
+
                 <h3>Firma Electrónica</h3>
                 <div class="form-group">
                     <div id="signature-pad" class="signature-pad">
@@ -157,6 +160,50 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var canvas = document.getElementById('signature-canvas');
+            var signaturePad = new SignaturePad(canvas);
+            var saveButton = document.getElementById('save');
+            var clearButton = document.getElementById('clear');
+            var signatureInput = document.getElementById('id_firma_electronica');
+
+            // Ajusta el tamaño del lienzo
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+
+            // Asegúrate de que solo haya un único listener en el botón de guardar
+            if (saveButton) {
+                saveButton.removeEventListener('click', saveSignature); // Elimina cualquier listener previo
+                saveButton.addEventListener('click', saveSignature);
+            }
+
+            function saveSignature(event) {
+                console.log("Save button clicked");
+                if (!signaturePad.isEmpty()) {
+                    var dataURL = signaturePad.toDataURL();
+                    signatureInput.value = dataURL;
+                    alert('Firma guardada correctamente');
+                } else {
+                    alert('Por favor, firme en el recuadro.');
+                    event.preventDefault();
+                }
+            }
+
+            clearButton?.addEventListener('click', function () {
+                signaturePad.clear();
+                signatureInput.value = '';
+            });
+
+            // Restaurar firma si está disponible
+            if (signatureInput.value) {
+                var image = new Image();
+                image.src = signatureInput.value;
+                image.onload = function () {
+                    signaturePad.fromDataURL(signatureInput.value);
+                };
+            }
+        });
+
         document.addEventListener('DOMContentLoaded', function () {
             // Auto-correct patente
             document.getElementById('patente')?.addEventListener('input', function () {
@@ -248,49 +295,7 @@
 
 
         });
-    document.addEventListener("DOMContentLoaded", function () {
-        var canvas = document.getElementById('signature-canvas');
-        var signaturePad = new SignaturePad(canvas);
-        var saveButton = document.getElementById('save');
-        var clearButton = document.getElementById('clear');
-        var signatureInput = document.getElementById('id_firma_electronica');
 
-        // Establece el tamaño del lienzo para que se ajuste al contenedor
-        canvas.width = canvas.clientWidth;
-        canvas.height = canvas.clientHeight;
-
-        // Verifica si el botón de guardar está siendo registrado más de una vez
-        if (saveButton) {
-            saveButton.removeEventListener('click', saveSignature); // Elimina cualquier listener previo
-            saveButton.addEventListener('click', saveSignature);
-        }
-
-        function saveSignature(event) {
-            console.log("Save button clicked");
-            if (!signaturePad.isEmpty()) {
-                var dataURL = signaturePad.toDataURL();
-                signatureInput.value = dataURL;
-                alert('Firma guardada correctamente');
-            } else {
-                alert('Por favor, firme en el recuadro.');
-                event.preventDefault();
-            }
-        }
-
-        clearButton?.addEventListener('click', function () {
-            signaturePad.clear();
-            signatureInput.value = '';
-        });
-
-        // Restaurar firma si está disponible
-        if (signatureInput.value) {
-            var image = new Image();
-            image.src = signatureInput.value;
-            image.onload = function () {
-                signaturePad.fromDataURL(signatureInput.value);
-            };
-        }
-    });
 
 
 
