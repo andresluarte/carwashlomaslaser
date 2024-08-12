@@ -15,6 +15,7 @@ urlpatterns = [
     path('registro', registro, name="registro"),
     path('reserva', reserva, name="reserva"),
     path('exportar_ingresos/', export_ingresos_to_excel, name='export_ingresos_to_excel'),
+    path('', inicio, name='home'),  # Agrega esta línea
 
 
 

@@ -21,7 +21,7 @@ def inicio(request):
     return render(request,'home.html')
 
 from django.contrib import messages
-
+@login_required
 def ingreso(request):
     if request.method == 'POST':
         formulario = IngresoForm(data=request.POST, files=request.FILES)
@@ -40,9 +40,6 @@ def ingreso(request):
         formulario = IngresoForm()
     
     return render(request, 'ingreso.html', {'form': formulario})
-
-
-
 def reserva(request):
     
     data = {
@@ -62,12 +59,13 @@ def reserva(request):
 def contacto(request):
     return render(request,'contacto.html')
 
+@login_required
 def tabla_ingresos(request):
     data = Ingreso.objects.all()
     filters = FilterIngreso(request.GET, queryset=data)
     filtered_data = filters.qs
     
-    paginator = Paginator(filtered_data, 10)  # 5 ingresos por página
+    paginator = Paginator(filtered_data, 10)  # 10 ingresos por página
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 

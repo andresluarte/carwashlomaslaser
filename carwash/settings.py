@@ -33,6 +33,7 @@ DEBUG = True
 
 MESSAGE_STORAGE="django.contrib.messages.storage.cookie.CookieStorage"
 
+LOGIN_URL = '/login/'  # Cambia esto a la URL correcta si es diferente
 
 
 ALLOWED_HOSTS = []
