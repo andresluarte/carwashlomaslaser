@@ -65,7 +65,9 @@ class IngresoForm(forms.ModelForm):
             if patente[2] != '-' or patente[5] != '-':
                 raise forms.ValidationError("El formato de la patente debe ser XX-XX-XX.")
             return patente
-        return patente
+        else:
+            raise forms.ValidationError("La patente no puede estar vacía.")
+
 
     def clean(self):
         cleaned_data = super().clean()
