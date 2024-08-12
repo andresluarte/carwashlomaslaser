@@ -95,7 +95,8 @@
     <button type="button" id="save" class="btn btn-primary">Guardar Firma</button>
     <input type="hidden" id="id_firma_electronica" name="firma_electronica">
 </div>
-
+<br>
+<br>
                 {% if form.non_field_errors %}
     <div class="alert alert-danger">
         {% for error in form.non_field_errors %}
@@ -120,8 +121,7 @@
         {% endfor %}
     </ul>
 {% endif %}
-<br>
-<br>
+
                 <div class="d-flex justify-content-end">
                     <input type="reset" value="Cancelar" class="btn btn-danger"> &nbsp;
                     <button type="submit" id="btnEnviar" style="background-color: forestgreen;" class="btn btn-primary">Ingresar</button>
@@ -129,6 +129,8 @@
             </form>
         </div>
     </div>
+    <br>
+<br>
     {% block js %}
     <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
