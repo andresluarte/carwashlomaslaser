@@ -20,7 +20,7 @@
 </head>
 <body>
     {% block contenido %}
-    <h2>Ingresar Vehículo</h2>
+    <h3>Ingresar Vehículo</h3>
     <div class="row">
         <div class="col-10 col-md-8 offset-md-3">
             <form action="" method="POST">
@@ -75,21 +75,27 @@
 
                 
 
-                <h3>Firma Electrónica</h3>
-                <div class="form-group">
-                    <div id="signature-pad" class="signature-pad">
-                        <canvas id="signature-canvas" width="400" height="200"></canvas>
-                    </div>
-                    <button type="button" id="clear" class="btn btn-secondary">Limpiar</button>
-                    <button type="button" id="save" class="btn btn-primary">Guardar Firma</button>
-                    <input type="hidden" id="id_firma_electronica" name="firma_electronica">
-                </div>
+                <h3>Declaración del Cliente</h3>
+<p>
+    El cliente manifiesta que no tiene nada importante y/o de valor dentro de su vehículo, liberando a "Carwash Lomas Laser" de cualquier responsabilidad futura. Además, no nos hacemos responsables por rayas existentes en el vehículo, las cuales se hacen visibles con el lavado.
+</p>
 
-                <h3>Cliente Acepta</h3>
-                <div class="form-group">
-                    <label><input type="radio" name="cliente_acepta" value="si" /> Sí</label>
-                    <label><input type="radio" name="cliente_acepta" value="no" /> No</label>
-                </div>
+<h3>Cliente Acepta</h3>
+<div class="form-group">
+    <label><input type="radio" name="cliente_acepta" value="si" required /> Sí</label>
+    <label><input type="radio" name="cliente_acepta" value="no" required /> No</label>
+</div>
+
+<h3>Firma Electrónica</h3>
+<div class="form-group">
+    <div id="signature-pad" class="signature-pad">
+        <canvas id="signature-canvas" width="400" height="200"></canvas>
+    </div>
+    <button type="button" id="clear" class="btn btn-secondary">Limpiar</button>
+    <button type="button" id="save" class="btn btn-primary">Guardar Firma</button>
+    <input type="hidden" id="id_firma_electronica" name="firma_electronica">
+</div>
+
                 {% if form.non_field_errors %}
     <div class="alert alert-danger">
         {% for error in form.non_field_errors %}
@@ -150,9 +156,9 @@
                 if (vehiculo === 'CITYCAR') {
                     valor = (lavado === 'EXPRESS') ? 9000 : 14000;
                 } else if (vehiculo === 'SEDAN' || vehiculo === 'HATCHBACK') {
-                    valor = (lavado === 'EXPRESS') ? 11000 : 14000;
+                    valor = (lavado === 'EXPRESS') ? 11000 : 17000;
                 } else if (vehiculo === 'SUV') {
-                    valor = (lavado === 'EXPRESS') ? 12000 : 17000;
+                    valor = (lavado === 'EXPRESS') ? 12000 : 18000;
                 } else if (vehiculo === 'CAMIONETA') {
                     valor = (lavado === 'EXPRESS') ? 14000 : 19000;
                 } else if (vehiculo === 'XL') {
