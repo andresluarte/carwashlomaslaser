@@ -32,7 +32,7 @@ def validar_rut_chileno(value):
     # Remover puntos, guion y convertir a mayúsculas
     rut = value.upper().replace(".", "").replace("-", "")
     
-    # Verificar que el RUT tenga el formato adecuado
+    # Verificar que el RUT tenga el formato adecuado (7 u 8 dígitos + 1 dígito verificador)
     if not re.match(r'^\d{7,8}[0-9K]$', rut):
         raise ValidationError('RUT inválido. Debe estar en el formato XXXXXXXX-X')
     
@@ -43,7 +43,7 @@ def validar_rut_chileno(value):
     # Cálculo del dígito verificador
     reversed_digits = map(int, reversed(rut_sin_dv))
     factors = [2, 3, 4, 5, 6, 7]
-    total = sum(d * f for d, f in zip(reversed_digits, factors * 3))
+    total = sum(d * f for d, f in zip(reversed_digits, factors * len(rut_sin_dv)))
     remainder = 11 - total % 11
     
     if remainder == 11:
@@ -56,7 +56,6 @@ def validar_rut_chileno(value):
     # Verificar si el dígito verificador calculado coincide con el proporcionado
     if dv_calculado != dv:
         raise ValidationError('RUT inválido. Dígito verificador incorrecto.')
-
 
 
 
