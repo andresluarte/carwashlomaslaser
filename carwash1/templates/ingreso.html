@@ -241,39 +241,49 @@
 
         });
         document.addEventListener("DOMContentLoaded", function () {
-            // Firma Electrónica
-            var signaturePad = new SignaturePad(document.getElementById('signature-canvas'));
-            var saveButton = document.getElementById('save');
-            var clearButton = document.getElementById('clear');
-            var signatureInput = document.getElementById('id_firma_electronica');
+    // Firma Electrónica
+    var signaturePad = new SignaturePad(document.getElementById('signature-canvas'));
+    var saveButton = document.getElementById('save');
+    var clearButton = document.getElementById('clear');
+    var signatureInput = document.getElementById('id_firma_electronica');
 
-            saveButton?.addEventListener('click', function (event) {
-                if (!signaturePad.isEmpty()) {
-                    var dataURL = signaturePad.toDataURL();
-                    signatureInput.value = dataURL;
-                    if (!alert('Firma guardada correctamente')) {
-                        event.preventDefault();
-                    }
-                } else {
-                    alert('Por favor, firme en el recuadro.');
-                    event.preventDefault();
-                }
-            });
+    saveButton?.addEventListener('click', function (event) {
+        if (!signaturePad.isEmpty()) {
+            var dataURL = signaturePad.toDataURL();
+            signatureInput.value = dataURL;
+            // Mostrar un mensaje de éxito sin usar alert
+            var successMessage = document.createElement('div');
+            successMessage.textContent = 'Firma guardada correctamente';
+            successMessage.style.color = 'green';
+            successMessage.style.fontWeight = 'bold';
+            document.body.appendChild(successMessage);
 
-            clearButton?.addEventListener('click', function () {
-                signaturePad.clear();
-                signatureInput.value = '';
-            });
+            // Opcional: Eliminar el mensaje después de unos segundos
+            setTimeout(function() {
+                document.body.removeChild(successMessage);
+            }, 3000);
 
-            // Restaurar firma si está disponible
-            if (signatureInput.value) {
-                var image = new Image();
-                image.src = signatureInput.value;
-                image.onload = function () {
-                    signaturePad.fromDataURL(signatureInput.value);
-                };
-            }
-        });
+        } else {
+            alert('Por favor, firme en el recuadro.');
+            event.preventDefault();  // Evita el envío del formulario si la firma está vacía
+        }
+    });
+
+    clearButton?.addEventListener('click', function () {
+        signaturePad.clear();
+        signatureInput.value = '';
+    });
+
+    // Restaurar firma si está disponible
+    if (signatureInput.value) {
+        var image = new Image();
+        image.src = signatureInput.value;
+        image.onload = function () {
+            signaturePad.fromDataURL(signatureInput.value);
+        };
+    }
+});
+
 
 
     </script>
