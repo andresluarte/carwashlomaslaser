@@ -19,14 +19,6 @@ from django.db import models
 import re
 from django.core.exceptions import ValidationError
 
-import re
-from django.core.exceptions import ValidationError
-
-import re
-from django.core.exceptions import ValidationError
-
-import re
-from django.core.exceptions import ValidationError
 
 def validar_rut_chileno(value):
     # Remover puntos, guion y convertir a mayúsculas
@@ -56,8 +48,6 @@ def validar_rut_chileno(value):
     # Verificar si el dígito verificador calculado coincide con el proporcionado
     if dv_calculado != dv:
         raise ValidationError('RUT inválido. Dígito verificador incorrecto.')
-
-
 
 class Ingreso(models.Model):
     VEHICULO_CHOICES = [
