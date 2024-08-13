@@ -95,13 +95,15 @@
                 <h3>Cliente Acepta</h3>
                 <div class="form-group">
                     <label>
-                        <input type="radio" name="cliente_acepta" value="True" required {% if form.cliente_acepta.value %}checked{% endif %} /> Sí
+                        <input type="radio" name="cliente_acepta" value="True" required {% if form.cliente_acepta.value
+                            %}checked{% endif %} /> Sí
                     </label>
                     <label>
-                        <input type="radio" name="cliente_acepta" value="False" required {% if not form.cliente_acepta.value %}checked{% endif %} /> No
+                        <input type="radio" name="cliente_acepta" value="False" required {% if not
+                            form.cliente_acepta.value %}checked{% endif %} /> No
                     </label>
                 </div>
-                
+
 
                 <h3>Firma Electrónica</h3>
                 <div class="form-group">
@@ -118,7 +120,7 @@
                 <br>
                 <br>
 
-                
+
 
                 {% for field in form %}
                 {% if field.errors %}
@@ -138,7 +140,7 @@
                 {% endif %}
 
                 <div class="d-flex justify-content-end">
-                    <input type="reset" value="Cancelar" class="btn btn-danger"> &nbsp;
+                    <input type="reset" value="Cancelar" id="cancelButton" class="btn btn-danger"> &nbsp;
                     <button type="submit" id="btnEnviar" style="background-color: forestgreen;"
                         class="btn btn-primary">Ingresar</button>
                 </div>
@@ -288,6 +290,12 @@
                     signaturePad.fromDataURL(signatureInput.value);
                 };
             }
+            var cancelButton = document.getElementById('cancelButton');
+
+            cancelButton?.addEventListener('click', function (event) {
+                event.preventDefault();  // Evita el comportamiento predeterminado del botón de reset
+                window.location.href = "{% url 'home' %}";  // Redirige a la página de inicio
+            });
         });
 
 
