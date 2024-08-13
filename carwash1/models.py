@@ -36,7 +36,8 @@ class Ingreso(models.Model):
 
     LAVADO_CHOICES = [
         ('EXPRESS', 'Express'),
-        ('FULL', 'Full')
+        ('FULL', 'Full'),
+        ('MAQUINA', 'Máquina')
     ]
 
     TIPO_PAGO_CHOICES = [
