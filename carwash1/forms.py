@@ -134,7 +134,7 @@ class ReservaForm(forms.ModelForm):
 class IngresoUpdateForm(forms.ModelForm):
     estado_factura = forms.ChoiceField(
         label='Estado Factura', 
-        choices=[('SIN FACTURA', 'Sin Factura'), ('POR EMITIR', 'Por Emitir'), ('EMITIIDA', 'Emitida')]
+        choices=[('SIN FACTURA', 'Sin Factura'), ('POR EMITIR', 'Por Emitir'), ('EMITIDA', 'Emitida')]
         
     )
     estado_vehiculo = forms.ChoiceField(
