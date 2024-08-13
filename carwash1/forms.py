@@ -148,7 +148,7 @@ class IngresoUpdateForm(forms.ModelForm):
     )
     contacto = forms.CharField(
         label='Contacto Telefónico', 
-        max_length=15, 
+        max_length=50, 
         required=False
     )
     comentario = forms.CharField(
