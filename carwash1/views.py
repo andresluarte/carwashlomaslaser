@@ -29,7 +29,7 @@ def ingreso(request):
             try:
                 ingreso = formulario.save()
                 messages.success(request, "Vehículo ingresado correctamente.")
-                return redirect('tabla_ingresos')
+                return redirect('ingreso')
             except Exception as e:
                 messages.error(request, f'Error al guardar el ingreso: {str(e)}')
         else:
