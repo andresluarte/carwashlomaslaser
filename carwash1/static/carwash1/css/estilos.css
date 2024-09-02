@@ -34,10 +34,11 @@
             width: 50%;
         }
         
-        .contenedor_logo {
+        header>.contenedor_logo {
             display: flex;
             align-items: center;
-            justify-content: center; /
+            justify-content: center; 
+            height: calc(100% - 80px);
         }
         
         .logo {
