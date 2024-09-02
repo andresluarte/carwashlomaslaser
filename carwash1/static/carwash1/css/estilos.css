@@ -45,7 +45,11 @@
             width: 150px;
             margin-left: 20px;
         }
-        
+        @media (max-width: 600px) {
+            .logo {
+                margin-left: 0; /* Eliminar margen en pantallas pequeñas */
+            }
+        }
         nav {
             display: flex;
             justify-content: flex-end;
