@@ -1,0 +1,287 @@
+yo como superuser creo un admin y este admin puede agregar colaboradores con el user_type: colaborador,ayudante,agricultor necesito que al momento de crear sectores que incluye zonas y lotes el admin tenga acceso a solo sus sectores,lotes y huertos y que los colaboradores,ayudantes y lotes se incluyan en esta sesion del admin, por ejemplo un colaborador no puede tener sus propios sectores todo se rige segun el admin, yo como super usuario quiero ver todos los sectores creados por los admin 
+from django.contrib.auth.models import AbstractUser, Group, Permission
+from django.db import models
+
+class CustomUser(AbstractUser):
+    USER_TYPE_CHOICES = (
+        ('superuser', 'Superusuario'),
+        ('admin', 'Administrador'),
+        ('colaborador', 'Colaborador'),
+        ('ayudante', 'Ayudante'),
+        ('agricultor', 'Agricultor'),
+    )
+    user_type = models.CharField(max_length=15, choices=USER_TYPE_CHOICES, default='superuser')
+    created_by = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='created_users')
+
+    def __str__(self):
+        return self.username
+
+    # Define un related_name para evitar conflictos con el modelo User por defecto
+    groups = models.ManyToManyField(
+        Group,
+        related_name='customuser_set',
+        blank=True,
+        help_text='The groups this user belongs to.',
+        verbose_name='groups'
+    )
+    user_permissions = models.ManyToManyField(
+        Permission,
+        related_name='customuser_set',
+        blank=True,
+        help_text='Specific permissions for this user.',
+        verbose_name='user permissions'
+    )
+
+    def __str__(self):
+        return self.username
+class Sector(models.Model):
+    nombre = models.CharField(max_length=50)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # Actualiza aquí
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='sector_creado', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.nombre
+
+class Huerto(MPTTModel):
+    nombre = models.CharField(max_length=50)
+    sector = models.ForeignKey(Sector, on_delete=models.CASCADE)
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='lotes')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # Actualiza aquí
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='huerto_creado', on_delete=models.CASCADE)
+
+    class MPTTMeta:
+        order_insertion_by = ['nombre']
+
+    def __str__(self):
+        return self.nombre
+
+class Lote(models.Model):
+    nombre = models.CharField(max_length=50)
+    huerto = models.ForeignKey(Huerto, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # Actualiza aquí
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='lote_creado', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.nombre
+
+def gestion_zona(request):
+    sectores = Sector.objects.all()
+
+    context = {
+        'sectores': sectores
+    }
+
+    return render(request, "agrosmart/zona/gestion_zona.html", context)
+
+
+from django.shortcuts import render, redirect
+from .forms import SectorForm, HuertoForm, LoteForm
+
+def agregar_sector(request):
+    if request.method == "POST":
+        form = SectorForm(request.POST)
+        if form.is_valid():
+            sector = form.save()  # Obtén el sector recién creado
+            # Redirige al formulario de creación de Huerto y pasa el sector como contexto
+            return redirect('agregarhuerto', sector_id=sector.id)
+    else:
+        form = SectorForm()
+    return render(request, 'agrosmart/zona/agregarsector.html', {'form': form})
+
+def modificarsector(request,id):
+    sectores = get_object_or_404(Sector,id=id)
+    data ={
+        'form' : SectorModificarForm(instance=sectores)
+    }
+
+    if request.method == 'POST':
+        formulario = SectorModificarForm(data=request.POST,instance=sectores,files=request.FILES)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request,"Modificado Correctamente")
+            
+        data["form"] = formulario
+
+    return render(request, 'agrosmart/zona/modificarsector.html',data)
+
+def modificarhuerto(request,id):
+    huertos = get_object_or_404(Huerto,id=id)
+    data = {
+        'form':HuertoModificarForm(instance=huertos)
+       
+    }
+    if request.method == 'POST':
+        formulario = HuertoModificarForm(data=request.POST,instance=huertos,files=request.FILES)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request,"Huerto Modificado Correctamente")
+
+        data["form"] = formulario
+        return redirect("gestion_zona")
+
+    return render(request, 'agrosmart/zona/modificarhuerto.html',data)
+
+def modificarlote(request,id):
+    lotes = get_object_or_404(Lote,id=id)
+    data = {
+        'form':LoteModificarForm(instance=lotes)
+       
+    }
+    if request.method == 'POST':
+        formulario = LoteModificarForm(data=request.POST,instance=lotes,files=request.FILES)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request,"Lote Modificado Correctamente")
+
+        data["form"] = formulario
+        return redirect("gestion_zona")
+
+    return render(request, 'agrosmart/zona/modificarlote.html',data)
+
+
+@login_required(login_url="my_login")
+def agregar_sector(request):
+    if request.method == "POST":
+        form = SectorForm(request.POST)
+        if form.is_valid():
+            sector = form.save(commit=False)
+            sector.user = request.user  # Asigna el usuario logueado
+            sector.save()
+            return redirect('agregar_huerto', sector_id=sector.id)
+    else:
+        form = SectorForm()
+    return render(request, 'agrosmart/zona/agregarsector.html', {'form': form})
+
+@login_required(login_url="my_login")
+def agregar_huerto_sin_sector(request):
+    if request.method == 'POST':
+        form = HuertoForm(request.POST)
+        if form.is_valid():
+            huerto = form.save(commit=False)
+            huerto.user = request.user  # Asigna el usuario logueado
+            huerto.save()
+            return redirect('agregarlote')
+    else:
+        form = HuertoForm()
+    return render(request, 'agrosmart/zona/agregarhuerto.html', {'form': form})
+
+@login_required(login_url="my_login")
+def agregar_huerto(request, sector_id):
+    sector = Sector.objects.get(id=sector_id)  # Obtiene el sector del contexto
+    if request.method == "POST":
+        form = HuertoForm(request.POST)
+        if form.is_valid():
+            huerto = form.save(commit=False)
+            huerto.sector = sector  # Asigna el sector al huerto
+            huerto.user = request.user  # Asigna el usuario logueado
+            huerto.save()
+            # Redirige a donde desees después de guardar
+            return redirect('agregarlote')
+    else:
+        form = HuertoForm(initial={'sector': sector})  # Establece el sector como valor predeterminado
+    return render(request, 'agrosmart/zona/agregarhuerto.html', {'form': form})
+
+@login_required(login_url="my_login")
+def agregar_lote(request):
+    if request.method == 'POST':
+        form = LoteForm(request.POST)
+        if form.is_valid():
+            lote = form.save(commit=False)
+            lote.user = request.user  # Asigna el usuario logueado
+            lote.save()
+            return redirect('gestion_zona')
+    else:
+        form = LoteForm()
+    return render(request, 'agrosmart/zona/agregarlote.html', {'form': form})
+
+def cargar_huertos(request):
+    sector_id = request.GET.get('sector_id')
+    huertos = Huerto.objects.filter(sector_id=sector_id)
+    huertos_data = [{'id': huerto.id, 'nombre': huerto.nombre} for huerto in huertos]
+    return JsonResponse({'huertos': huertos_data})
+
+
+def cargar_lotes(request):
+    huerto_id = request.GET.get('huerto_id')
+    lotes = Lote.objects.filter(huerto_id=huerto_id)
+    lotes_data = [{'id': lote.id, 'nombre': lote.nombre} for lote in lotes]
+    return JsonResponse({'lotes': lotes_data})
+
+
+
+
+
+def eliminarsector(request, id):
+    sector = get_object_or_404(Sector, id=id)
+    sector.delete()
+    messages.success(request, "Sector Eliminado Correctamente")
+    return redirect('gestion_zona')
+
+def eliminarhuerto(request, id):
+    huerto = get_object_or_404(Huerto, id=id)
+    huerto.delete()
+    messages.success(request, "Sector Eliminado Correctamente")
+    return redirect ('gestion_zona')
+    
+
+
+
+
+@login_required(login_url="my_login")
+def agregar_jornada(request):
+    if request.method == 'POST':
+        form = JornadaForm(request.POST)
+        if form.is_valid():
+            jornada = form.save(commit=False)  # No guardar aún para hacer modificaciones
+            jornada.user = request.user  # Asignar el usuario logueado al campo 'user'
+            jornada.created_by = request.user  # Asignar el usuario logueado al campo 'created_by'
+            jornada.save()  # Ahora sí guardar la jornada con el usuario asignado
+            return redirect('gestion_jornadas')
+    else:
+        form = JornadaForm()
+    
+    return render(request, 'agrosmart/jornada/crear_jornada.html', {'form': form})
+
+
+guiate por la jornada  
+@login_required(login_url="my_login")
+def agregar_jornada(request):
+    if request.method == 'POST':
+        form = JornadaForm(request.POST)
+        if form.is_valid():
+            jornada = form.save(commit=False)  # No guardar aún para hacer modificaciones
+            jornada.user = request.user  # Asignar el usuario logueado al campo 'user'
+            jornada.created_by = request.user  # Asignar el usuario logueado al campo 'created_by'
+            jornada.save()  # Ahora sí guardar la jornada con el usuario asignado
+            return redirect('gestion_jornadas')
+    else:
+        form = JornadaForm()
+    
+    return render(request, 'agrosmart/jornada/crear_jornada.html', {'form': form})
+@login_required(login_url="my_login")
+def JornadaList(request):
+    if request.user.is_superuser:
+        queryset = Jornada.objects.all()
+    elif request.user.user_type == 'admin':
+        queryset = Jornada.objects.filter(user=request.user)
+    elif request.user.user_type == 'colaborador':
+        # Colaborador puede ver sus propias jornadas y las de su admin
+        admin_user = request.user.created_by
+        queryset = Jornada.objects.filter(user__in=[request.user, admin_user])
+    elif request.user.user_type == 'agricultor':
+        # Agricultor puede ver sus propias jornadas y las de su admin y colaborador
+        colaborador_user = request.user.created_by
+        admin_user = colaborador_user.created_by if colaborador_user else None
+        queryset = Jornada.objects.filter(user__in=[request.user, colaborador_user, admin_user])
+    else:
+        queryset = Jornada.objects.none()
+
+    filtered_jornadas = JornadaFilter(request.GET, queryset=queryset)
+
+    context = {'filtered_jornadas': filtered_jornadas}
+    paginated_filtered_jornadas = Paginator(filtered_jornadas.qs, 3)
+    page_number = request.GET.get('page')
+    jornada_page_obj = paginated_filtered_jornadas.get_page(page_number)
+    context['jornada_page_obj'] = jornada_page_obj
+
+    return render(request, 'agrosmart/jornada/gestion_jornadas.html', context=context)

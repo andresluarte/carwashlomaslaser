@@ -1,3 +1,9 @@
+@media (max-width: 600px) {
+    .logo {
+        margin-left: 0; /* Eliminar margen en pantallas pequeñas */
+    }
+}
+
         * {
             margin: 0;
             padding: 0;
@@ -35,6 +41,7 @@
         .contenedor_logo {
             display: flex;
             align-items: center;
+            justify-content: center; /
         }
         
         .logo {

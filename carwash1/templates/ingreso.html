@@ -167,7 +167,7 @@
             var vehiculoField = document.querySelector('[name="vehiculo"]');
             var lavadoField = document.querySelector('[name="lavado"]');
             var valorField = document.querySelector('[name="valor"]');
-            var propinaField = document.querySelector('[name="propina"]');
+            
 
             function updateFields() {
                 var vehiculo = vehiculoField?.value;
@@ -191,9 +191,7 @@
                 if (valorField) {
                     valorField.value = valor;
                 }
-                if (propinaField) {
-                    propinaField.value = (valor * 0.1).toFixed(0);
-                }
+                
             }
 
             vehiculoField?.addEventListener('change', updateFields);
