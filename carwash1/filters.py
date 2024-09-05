@@ -17,4 +17,4 @@ class FilterIngreso(django_filters.FilterSet):
     )
     class Meta:
         model = Ingreso
-        fields = ['patente', 'tipo_de_pago', 'tipo_doc', 'lavado', 'vehiculo','estado_vehiculo']
+        fields = ['patente', 'tipo_de_pago', 'tipo_doc', 'lavado', 'vehiculo','estado_vehiculo','fecha_ingreso']
