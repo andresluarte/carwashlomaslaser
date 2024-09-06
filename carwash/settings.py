@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles','carwash1','bootstrap5','crispy_forms','django_filters',
+    'django.contrib.staticfiles','carwash1','bootstrap5','crispy_forms','django_filters','django.contrib.humanize',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
