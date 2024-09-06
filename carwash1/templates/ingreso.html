@@ -169,30 +169,31 @@
             var valorField = document.querySelector('[name="valor"]');
             
 
-            function updateFields() {
-                var vehiculo = vehiculoField?.value;
-                var lavado = lavadoField?.value;
-                var valor = 0;
-                if (lavado === 'MAQUINA') {
-                    valor = 10000; // Cualquier vehículo con "Máquina" tiene un valor fijo de 10000
-                } else {
-                    if (vehiculo === 'CITYCAR') {
-                        valor = (lavado === 'EXPRESS') ? 9000 : 14000;
-                    } else if (vehiculo === 'SEDAN' || vehiculo === 'HATCHBACK') {
-                        valor = (lavado === 'EXPRESS') ? 11000 : 17000;
-                    } else if (vehiculo === 'SUV') {
-                        valor = (lavado === 'EXPRESS') ? 12000 : 20000;
-                    } else if (vehiculo === 'CAMIONETA') {
-                        valor = (lavado === 'EXPRESS') ? 14000 : 22000;
-                    } else if (vehiculo === 'XL') {
-                        valor = (lavado === 'EXPRESS') ? 17000 : 27000;
-                    }
+        function updateFields() {
+            var vehiculo = vehiculoField?.value;
+            var lavado = lavadoField?.value;
+            var valor = 0;
+            if (lavado === 'MAQUINA') {
+                valor = 10000;
+            } else {
+                if (vehiculo === 'CITYCAR') {
+                    valor = (lavado === 'EXPRESS') ? 9000 : 14000;
+                } else if (vehiculo === 'SEDAN' || vehiculo === 'HATCHBACK') {
+                    valor = (lavado === 'EXPRESS') ? 11000 : 17000;
+                } else if (vehiculo === 'SUV') {
+                    valor = (lavado === 'EXPRESS') ? 12000 : 20000;
+                } else if (vehiculo === 'CAMIONETA') {
+                    valor = (lavado === 'EXPRESS') ? 14000 : 22000;
+                } else if (vehiculo === 'XL') {
+                    valor = (lavado === 'EXPRESS') ? 17000 : 27000;
                 }
-                if (valorField) {
-                    valorField.value = valor;
-                }
-                
             }
+
+        // Formatear el valor con separadores de miles
+            if (valorField) {
+            valorField.value = valor.toLocaleString('es-CL'); // "es-CL" es para el formato chileno, puedes ajustarlo a tu preferencia
+            }
+        }
 
             vehiculoField?.addEventListener('change', updateFields);
             lavadoField?.addEventListener('change', updateFields);
