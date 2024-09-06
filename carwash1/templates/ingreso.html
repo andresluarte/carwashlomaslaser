@@ -167,7 +167,13 @@
             var vehiculoField = document.querySelector('[name="vehiculo"]');
             var lavadoField = document.querySelector('[name="lavado"]');
             var valorField = document.querySelector('[name="valor"]');
-            
+            document.querySelector('form').addEventListener('submit', function () {
+                var valorField = document.querySelector('[name="valor"]');
+                if (valorField) {
+                    valorField.value = valorField.value.replace(/\./g, '');  // Elimina puntos de miles
+                }
+            });
+           
 
         function updateFields() {
             var vehiculo = vehiculoField?.value;
