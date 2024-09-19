@@ -185,10 +185,11 @@ class IngresoUpdateForm(forms.ModelForm):
         tipo_de_pago = self.instance.tipo_de_pago  # Obtener el tipo de pago actual del ingreso
 
         # Lógica para habilitar/deshabilitar campos basado en 'tipo_doc' y 'tipo_de_pago'
-        if tipo_doc != 'FACTURA':
-            self.fields['estado_factura'].widget.attrs['disabled'] = 'disabled'
-            self.fields['Rut'].widget.attrs['disabled'] = 'disabled'
-        else:
+        if tipo_doc == 'FACTURA':
             self.fields['estado_factura'].widget.attrs.pop('disabled', None)  # Elimina 'disabled'
-            self.fields['Rut'].widget.attrs.pop('disabled', None)  # Elimina 'disabled'
+            self.fields['Rut'].widget.attrs.pop('disabled', None)
+            
+        else:
+            self.fields['estado_factura'].widget.attrs['disabled'] = 'disabled'
+            self.fields['Rut'].widget.attrs['disabled'] = 'disabled'  # Elimina 'disabled'
 
