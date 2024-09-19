@@ -159,24 +159,22 @@ class IngresoUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Ingreso
-        fields = ['estado_factura', 'estado_vehiculo','tipo_de_pago','tipo_doc','Rut', 'contacto','comentario']
+        fields = ['estado_factura', 'estado_vehiculo', 'tipo_de_pago', 'tipo_doc', 'Rut', 'contacto', 'comentario']
 
     def clean(self):
         cleaned_data = super().clean()
-        tipo_doc = self.instance.tipo_doc  # Obtener el tipo de documento actual del ingreso
-
+        tipo_doc = self.cleaned_data.get('tipo_doc')  # Obtener el tipo de documento actual del ingreso
         rut = cleaned_data.get('Rut')
         estado_factura = cleaned_data.get('estado_factura')
 
+        # Validación según el tipo de documento
         if tipo_doc == 'FACTURA':
             if not rut:
                 self.add_error('Rut', 'El RUT es obligatorio si se selecciona "Factura".')
         else:
             if rut:
                 self.add_error('Rut', 'El RUT no debe ser ingresado si no es "Factura".')
-            
-            # Verificar si el estado_factura está siendo modificado
-            if estado_factura and estado_factura != self.instance.estado_factura:
+            if estado_factura and estado_factura != 'SIN FACTURA':
                 self.add_error('estado_factura', 'El estado de la factura no debe ser modificado si no es "Factura".')
 
         return cleaned_data
@@ -184,12 +182,13 @@ class IngresoUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         tipo_doc = self.instance.tipo_doc  # Obtener el tipo de documento actual del ingreso
+        tipo_de_pago = self.instance.tipo_de_pago  # Obtener el tipo de pago actual del ingreso
 
+        # Lógica para habilitar/deshabilitar campos basado en 'tipo_doc' y 'tipo_de_pago'
         if tipo_doc != 'FACTURA':
             self.fields['estado_factura'].widget.attrs['disabled'] = 'disabled'
             self.fields['Rut'].widget.attrs['disabled'] = 'disabled'
-        if tipo_doc == 'FACTURA':
+        else:
             self.fields['estado_factura'].widget.attrs.pop('disabled', None)  # Elimina 'disabled'
             self.fields['Rut'].widget.attrs.pop('disabled', None)  # Elimina 'disabled'
-
 
