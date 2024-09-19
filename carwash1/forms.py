@@ -159,7 +159,7 @@ class IngresoUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Ingreso
-        fields = ['estado_factura', 'estado_vehiculo', 'tipo_de_pago', 'tipo_doc', 'Rut', 'contacto', 'comentario']
+        fields = ['estado_factura', 'estado_vehiculo', 'tipo_de_pago',  'Rut', 'contacto', 'comentario']
 
     def clean(self):
         cleaned_data = super().clean()
