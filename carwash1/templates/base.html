@@ -61,10 +61,10 @@
                     <a class="nav-link " aria-current="page" href="{% url 'tabla_ingresos' %}">Ver Ingresos de Vehículos</a> {% endif %}
 
 
-                    <a class="nav-link" aria-current="page" href="{% url 'contacto' %}">Contacto</a> {% if user.is_authenticated %}
+                     {% if user.is_authenticated %}
 
                     <a class="nav-link" aria-current="page" href="{% url 'logout' %}">Logout</a>
-                    <a class="nav-link " aria-current="page" href="{% url 'registro' %}">Regístrate</a>
+                    <a class="nav-link " aria-current="page" href="{% url 'registro' %}">Regístrar Usuario</a>
                     </a> {% else %}
                     
 

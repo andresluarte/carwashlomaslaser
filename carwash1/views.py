@@ -104,7 +104,7 @@ def eliminar_ingreso(request,id):
     return redirect(to=tabla_ingresos)
 
 from django.contrib.auth.models import Permission
-@login_required
+@login_required(login_url='home')
 def registro(request):
     data = {
         'form': CustomUserCreationForm()
