@@ -188,3 +188,8 @@ class IngresoUpdateForm(forms.ModelForm):
         if tipo_doc != 'FACTURA':
             self.fields['estado_factura'].widget.attrs['disabled'] = 'disabled'
             self.fields['Rut'].widget.attrs['disabled'] = 'disabled'
+        if tipo_doc == 'FACTURA':
+            self.fields['estado_factura'].widget.attrs.pop('disabled', None)  # Elimina 'disabled'
+            self.fields['Rut'].widget.attrs.pop('disabled', None)  # Elimina 'disabled'
+
+
