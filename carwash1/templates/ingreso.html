@@ -249,13 +249,7 @@
 
             var rutInput = document.querySelector('[name="Rut"]');
             rutInput?.addEventListener('input', function () {
-                let value = this.value.toUpperCase(); // Convertir a mayúsculas la "k"
-
-                // Permitir solo números y la letra "K"
-                value = value.replace(/[^0-9K]/g, '');
-
-                // Formatear el valor
-                this.value = formatRut(value);
+                this.value = formatRut(this.value.replace(/\D/g, ''));
             });
 
 
