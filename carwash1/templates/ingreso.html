@@ -241,7 +241,7 @@
 
             // Formatear RUT automáticamente
             function formatRut(rut) {
-                return rut.replace(/^(\d{1,2})(\d{3})(\d{3})([\dkK][-]?[kK]?)$/, '$1.$2.$3-$4');
+                return rut.replace(/^(\d{1,2})(\d{3})(\d{3})([-]?[kK]?)$/, '$1.$2.$3-$4');
             }
 
             var rutInput = document.querySelector('[name="Rut"]');
