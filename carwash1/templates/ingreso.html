@@ -95,12 +95,10 @@
                 <h3>Cliente Acepta</h3>
                 <div class="form-group">
                     <label>
-                        <input type="radio" name="cliente_acepta" value="True" required {% if form.cliente_acepta.value
-                            %}checked{% endif %} /> Sí
+                        <input type="radio" name="cliente_acepta" value="True" required {% if form.cliente_acepta.value %}checked{% endif %} /> Sí
                     </label>
                     <label>
-                        <input type="radio" name="cliente_acepta" value="False" required {% if not
-                            form.cliente_acepta.value %}checked{% endif %} /> No
+                        <input type="radio" name="cliente_acepta" value="False" required {% if not form.cliente_acepta.value %}checked{% endif %} /> No
                     </label>
                 </div>
 
