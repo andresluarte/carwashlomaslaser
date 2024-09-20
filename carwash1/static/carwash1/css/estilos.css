@@ -367,11 +367,18 @@
         }
         
         .table-scroll {
-            overflow-x: auto;
-            max-height: 400px; /* Altura máxima visible */
+            max-height: 400px; /* Ajusta la altura máxima de la tabla */
+            overflow-y: auto; /* Habilita el scroll vertical */
+            width: 100%;
         }
         
         .table-scroll table {
             width: 100%;
+        }
+        .table-scroll thead {
+            position: sticky; /* Hace que el encabezado sea fijo */
+            top: 0; /* Fija el encabezado en la parte superior */
+            z-index: 1; /* Asegura que el encabezado esté por encima del contenido */
+            background-color: white; /* Asegura que el encabezado tenga un fondo blanco */
         }
         
