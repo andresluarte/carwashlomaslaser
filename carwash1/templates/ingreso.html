@@ -95,16 +95,13 @@
                 <h3>Cliente Acepta</h3>
                 <div class="form-group">
                     <label>
-                        <input type="radio" name="cliente_acepta" value="True" required {% if
-                            form.cliente_acepta.value=='True' %}checked{% endif %} /> Sí
+                        <input type="radio" name="cliente_acepta" value="True" required {% if form.cliente_acepta.value %}checked{% endif %} /> Sí
                     </label>
                     <label>
-                        <input type="radio" name="cliente_acepta" value="False" required {% if
-                            form.cliente_acepta.value=='False' %}checked{% endif %} /> No
+                        <input type="radio" name="cliente_acepta" value="False" required {% if not form.cliente_acepta.value %}checked{% endif %} /> No
                     </label>
                 </div>
-
-
+                
 
                 <h3>Firma Electrónica</h3>
                 <div class="form-group">
@@ -176,33 +173,33 @@
                     valorField.value = valorField.value.replace(/\./g, '');  // Elimina puntos de miles
                 }
             });
+           
 
-
-            function updateFields() {
-                var vehiculo = vehiculoField?.value;
-                var lavado = lavadoField?.value;
-                var valor = 0;
-                if (lavado === 'MAQUINA') {
-                    valor = 10000;
-                } else {
-                    if (vehiculo === 'CITYCAR') {
-                        valor = (lavado === 'EXPRESS') ? 9000 : 14000;
-                    } else if (vehiculo === 'SEDAN' || vehiculo === 'HATCHBACK') {
-                        valor = (lavado === 'EXPRESS') ? 11000 : 17000;
-                    } else if (vehiculo === 'SUV') {
-                        valor = (lavado === 'EXPRESS') ? 12000 : 20000;
-                    } else if (vehiculo === 'CAMIONETA') {
-                        valor = (lavado === 'EXPRESS') ? 14000 : 22000;
-                    } else if (vehiculo === 'XL') {
-                        valor = (lavado === 'EXPRESS') ? 17000 : 27000;
-                    }
-                }
-
-                // Formatear el valor con separadores de miles
-                if (valorField) {
-                    valorField.value = valor.toLocaleString('es-CL'); // "es-CL" es para el formato chileno, puedes ajustarlo a tu preferencia
+        function updateFields() {
+            var vehiculo = vehiculoField?.value;
+            var lavado = lavadoField?.value;
+            var valor = 0;
+            if (lavado === 'MAQUINA') {
+                valor = 10000;
+            } else {
+                if (vehiculo === 'CITYCAR') {
+                    valor = (lavado === 'EXPRESS') ? 9000 : 14000;
+                } else if (vehiculo === 'SEDAN' || vehiculo === 'HATCHBACK') {
+                    valor = (lavado === 'EXPRESS') ? 11000 : 17000;
+                } else if (vehiculo === 'SUV') {
+                    valor = (lavado === 'EXPRESS') ? 12000 : 20000;
+                } else if (vehiculo === 'CAMIONETA') {
+                    valor = (lavado === 'EXPRESS') ? 14000 : 22000;
+                } else if (vehiculo === 'XL') {
+                    valor = (lavado === 'EXPRESS') ? 17000 : 27000;
                 }
             }
+
+        // Formatear el valor con separadores de miles
+            if (valorField) {
+            valorField.value = valor.toLocaleString('es-CL'); // "es-CL" es para el formato chileno, puedes ajustarlo a tu preferencia
+            }
+        }
 
             vehiculoField?.addEventListener('change', updateFields);
             lavadoField?.addEventListener('change', updateFields);
@@ -244,19 +241,12 @@
 
             // Formatear RUT automáticamente
             function formatRut(rut) {
-                // Formatear el RUT con puntos y guion
                 return rut.replace(/^(\d{1,2})(\d{3})(\d{3})([\dkK])$/, '$1.$2.$3-$4');
             }
 
             var rutInput = document.querySelector('[name="Rut"]');
             rutInput?.addEventListener('input', function () {
-                let value = this.value.toUpperCase(); // Convertir a mayúsculas la "k"
-
-                // Permitir solo números y la letra "K"
-                value = value.replace(/[^0-9K]/g, '');
-
-                // Formatear el valor
-                this.value = formatRut(value);
+                this.value = formatRut(this.value.replace(/\D/g, ''));
             });
 
 
