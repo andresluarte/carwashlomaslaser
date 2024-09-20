@@ -197,9 +197,14 @@
         const tableScrollHeader = document.querySelector('.table-scroll-header');
 
         // Clonar solo el encabezado de la tabla para el contenedor superior
-        const clonedTable = tableScroll.querySelector('table').cloneNode(true);
-        const clonedTableHead = clonedTable.querySelector('tbody');
-        if (clonedTableHead) clonedTable.removeChild(clonedTableHead);
+        const originalTable = tableScroll.querySelector('table');
+        const clonedTable = originalTable.cloneNode(true);
+
+        // Eliminar el contenido del cuerpo (tbody) en el clon para evitar duplicados
+        const clonedTBody = clonedTable.querySelector('tbody');
+        if (clonedTBody) clonedTable.removeChild(clonedTBody);
+
+        // Añadir solo el encabezado clonado al contenedor superior
         tableScrollHeader.appendChild(clonedTable);
 
         // Sincronizar el desplazamiento horizontal de ambos contenedores
