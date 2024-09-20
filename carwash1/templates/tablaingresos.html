@@ -30,6 +30,26 @@
 
 {% block css %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+<style>
+    /* Ajustes generales para el paginador */
+    .pagination {
+        display: flex;
+        flex-wrap: wrap; /* Para que se ajuste mejor en pantallas pequeñas */
+        justify-content: center;
+    }
+
+    .pagination .page-item {
+        margin: 0 5px;
+    }
+
+    /* En pantallas pequeñas, asegura que el paginador se ajuste mejor */
+    @media (max-width: 576px) {
+        .pagination .page-link {
+            padding: 5px 10px; /* Ajusta el padding para pantallas más pequeñas */
+            font-size: 14px; /* Reduce el tamaño de la fuente */
+        }
+    }
+</style>
 {% endblock %}
 
 {% block contenido %}
@@ -152,26 +172,30 @@
             </div>
         </div>
         
-
-    {% if paginator.num_pages > 1 %}
-    <div class="d-flex justify-content-center">
-        <ul class="pagination">
-            {% if entity.has_previous %}
-            <li class="page-item"><a class="page-link"
-                    href="?page={{ entity.previous_page_number }}#pagtable">Anterior</a></li>
-            {% endif %}
-            {% for page in paginator.page_range %}
-            <li class="page-item {% if page == entity.number %}active{% endif %}">
-                <a class="page-link" href="?page={{ page }}#pagtable">{{ page }}</a>
-            </li>
-            {% endfor %}
-            {% if entity.has_next %}
-            <li class="page-item"><a class="page-link" href="?page={{ entity.next_page_number }}#pagtable">Siguiente</a>
-            </li>
-            {% endif %}
-        </ul>
-    </div>
-    {% endif %}
+        <br>
+        <br>
+        <div class="d-flex justify-content-center">
+            <ul class="pagination flex-wrap">
+                {% if entity.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ entity.previous_page_number }}#pagtable">Anterior</a>
+                </li>
+                {% endif %}
+                
+                {% for page in paginator.page_range %}
+                <li class="page-item {% if page == entity.number %}active{% endif %}">
+                    <a class="page-link" href="?page={{ page }}#pagtable">{{ page }}</a>
+                </li>
+                {% endfor %}
+                
+                {% if entity.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ entity.next_page_number }}#pagtable">Siguiente</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+        
 
     <hr>
 
