@@ -1,5 +1,5 @@
-{% extends 'base.html' %} 
-{% load static %} 
+{% extends 'base.html' %}
+{% load static %}
 {% load crispy_forms_tags %}
 {% load humanize %}
 
@@ -7,23 +7,23 @@
 <script>
     function eliminarIngreso(id) {
         Swal.fire({
-                "title": "¡Estas Seguro?",
-                "text": "Esta acción no se puede deshacer",
-                "icon": "question",
-                "showCancelButton": true,
-                "cancelButtonText": "No, Cancelar",
-                "confirmButtonText": "Sí, Eliminar",
-                "reverseButton": true,
-                "confirmButtonColor": "#dc3545"
-            })
-            .then(function(result) {
+            "title": "¡Estas Seguro?",
+            "text": "Esta acción no se puede deshacer",
+            "icon": "question",
+            "showCancelButton": true,
+            "cancelButtonText": "No, Cancelar",
+            "confirmButtonText": "Sí, Eliminar",
+            "reverseButton": true,
+            "confirmButtonColor": "#dc3545"
+        })
+            .then(function (result) {
                 if (result.isConfirmed) {
                     window.location.href = "/eliminar_ingreso/" + id + "/"
                 }
             })
     }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" />
 {% endblock %}
@@ -83,86 +83,95 @@
 
         <button type="submit" class="btn btn-primary mb-2">Buscar</button>
         <br>
-        
-    </form>
-    <a href="{% url 'export_ingresos_to_excel' %}?{{ request.GET.urlencode }}" class="btn btn-success mb-2">Exportar a Excel</a>
 
-    <div class="table-responsive">
-        <table class="table table-striped table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>FECHA INGRESO</th>
-                    <th>COMENTARIO</th>
-                    <th>PATENTE</th>
-                    <th>VEHÍCULO</th>
-                    <th>LAVADO</th>
-                    <th>TIPO DE PAGO</th>
-                    <th>VALOR</th>
-                    <th>RECARGO</th>
-                    <th>CONTACTO</th>
-                    <th>ESTADO VEHÍCULO</th>
-                    <th>TIPO DOCUMENTO</th>
-                    <th>ESTADO FACTURA</th>
-                    <th>RUT</th>
-                    <th>CLIENTE ACEPTA</th>
-                    <th>FIRMA ELECTRÓNICA</th>
-                    <th>Opciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for ing in entity %}
-                <tr>
-                    <td>{{ ing.fecha_ingreso }}</td>
-                    <td>{{ ing.comentario }}</td>
-                    <td>{{ ing.patente }}</td>
-                    <td>{{ ing.vehiculo }}</td>
-                    <td>{{ ing.lavado }}</td>
-                    <td>{{ ing.tipo_de_pago }}</td>
-                    <td>${{ ing.valor|intcomma }}</td>
-                    <td>${{ ing.propina }}</td>
-                    <td>{{ ing.contacto }}</td>
-                    <td>{{ ing.estado_vehiculo }}</td>
-                    <td>{{ ing.tipo_doc }}</td>
-                    <td>{{ ing.estado_factura }}</td>
-                    <td>{{ ing.Rut }}</td>
-                    <td>{{ ing.cliente_acepta|yesno:"Sí,No" }}</td>
-                    <td>
-                        {% if ing.firma_electronica %}
+    </form>
+    <a href="{% url 'export_ingresos_to_excel' %}?{{ request.GET.urlencode }}" class="btn btn-success mb-2">Exportar a
+        Excel</a>
+
+    <div class="table-container">
+        <div class="table-scroll-header"></div>
+        <div class="table-scroll">
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>FECHA INGRESO</th>
+                        <th>COMENTARIO</th>
+                        <th>PATENTE</th>
+                        <th>VEHÍCULO</th>
+                        <th>LAVADO</th>
+                        <th>TIPO DE PAGO</th>
+                        <th>VALOR</th>
+                        <th>RECARGO</th>
+                        <th>CONTACTO</th>
+                        <th>ESTADO VEHÍCULO</th>
+                        <th>TIPO DOCUMENTO</th>
+                        <th>ESTADO FACTURA</th>
+                        <th>RUT</th>
+                        <th>CLIENTE ACEPTA</th>
+                        <th>FIRMA ELECTRÓNICA</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ing in entity %}
+                    <tr>
+                        <td>{{ ing.fecha_ingreso }}</td>
+                        <td>{{ ing.comentario }}</td>
+                        <td>{{ ing.patente }}</td>
+                        <td>{{ ing.vehiculo }}</td>
+                        <td>{{ ing.lavado }}</td>
+                        <td>{{ ing.tipo_de_pago }}</td>
+                        <td>${{ ing.valor|intcomma }}</td>
+                        <td>${{ ing.propina }}</td>
+                        <td>{{ ing.contacto }}</td>
+                        <td>{{ ing.estado_vehiculo }}</td>
+                        <td>{{ ing.tipo_doc }}</td>
+                        <td>{{ ing.estado_factura }}</td>
+                        <td>{{ ing.Rut }}</td>
+                        <td>{{ ing.cliente_acepta|yesno:"Sí,No" }}</td>
+                        <td>
+                            {% if ing.firma_electronica %}
                             <img src="{{ ing.firma_electronica }}" alt="Firma Electrónica" style="max-width: 200px;">
-                        {% else %}
+                            {% else %}
                             No disponible
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if perms.carwash1.change_ingreso %}
-                        <a href="{% url 'modificar_ingreso' ing.id %}" class="btn btn-info btn-sm">Editar</a> <br><br>
-                        {% endif %}
-                        {% if perms.carwash1.delete_ingreso %}
-                        <a href="#" onclick="eliminarIngreso({{ ing.id }})" class="btn btn-danger btn-sm">Eliminar</a>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if perms.carwash1.change_ingreso %}
+                            <a href="{% url 'modificar_ingreso' ing.id %}" class="btn btn-info btn-sm">Editar</a>
+                            <br><br>
+                            {% endif %}
+                            {% if perms.carwash1.delete_ingreso %}
+                            <a href="#" onclick="eliminarIngreso({{ ing.id }})"
+                                class="btn btn-danger btn-sm">Eliminar</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
+
     {% if paginator.num_pages > 1 %}
-<div class="d-flex justify-content-center">
-    <ul class="pagination">
-        {% if entity.has_previous %}
-            <li class="page-item"><a class="page-link" href="?page={{ entity.previous_page_number }}#pagtable">Anterior</a></li>
-        {% endif %}
-        {% for page in paginator.page_range %}
+    <div class="d-flex justify-content-center">
+        <ul class="pagination">
+            {% if entity.has_previous %}
+            <li class="page-item"><a class="page-link"
+                    href="?page={{ entity.previous_page_number }}#pagtable">Anterior</a></li>
+            {% endif %}
+            {% for page in paginator.page_range %}
             <li class="page-item {% if page == entity.number %}active{% endif %}">
                 <a class="page-link" href="?page={{ page }}#pagtable">{{ page }}</a>
             </li>
-        {% endfor %}
-        {% if entity.has_next %}
-            <li class="page-item"><a class="page-link" href="?page={{ entity.next_page_number }}#pagtable">Siguiente</a></li>
-        {% endif %}
-    </ul>
-</div>
-{% endif %}
+            {% endfor %}
+            {% if entity.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ entity.next_page_number }}#pagtable">Siguiente</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+    {% endif %}
 
     <hr>
 
@@ -183,6 +192,25 @@
                 }
             })
         }
+        // Sincroniza el scroll de la parte superior e inferior de la tabla
+        const tableScroll = document.querySelector('.table-scroll');
+        const tableScrollHeader = document.querySelector('.table-scroll-header');
+
+        // Clonar solo el encabezado de la tabla para el contenedor superior
+        const clonedTable = tableScroll.querySelector('table').cloneNode(true);
+        const clonedTableHead = clonedTable.querySelector('tbody');
+        if (clonedTableHead) clonedTable.removeChild(clonedTableHead);
+        tableScrollHeader.appendChild(clonedTable);
+
+        // Sincronizar el desplazamiento horizontal de ambos contenedores
+        tableScroll.addEventListener('scroll', function () {
+            tableScrollHeader.scrollLeft = this.scrollLeft;
+        });
+
+        tableScrollHeader.addEventListener('scroll', function () {
+            tableScroll.scrollLeft = this.scrollLeft;
+        });
+
     </script>
 
     <script src="" async defer></script>

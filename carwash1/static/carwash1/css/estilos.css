@@ -351,3 +351,27 @@
                 opacity: 1
             }
         }
+
+        .table-container {
+            position: relative;
+            width: 100%;
+        }
+        
+        .table-scroll-header {
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+        
+        .table-scroll-header table {
+            width: 100%;
+        }
+        
+        .table-scroll {
+            overflow-x: auto;
+            max-height: 400px; /* Altura máxima visible */
+        }
+        
+        .table-scroll table {
+            width: 100%;
+        }
+        
